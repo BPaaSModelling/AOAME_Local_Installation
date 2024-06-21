@@ -36,9 +36,6 @@
 ```bash 
 docker-compose up
 ```
-### Open your browser:
-#### Access the WebApp at: http://localhost:4200/
-#### Access Jena Fuseki Triple Store at: http://localhost:3030/ 
 
 ## Upload Ontologies to Jena Fuseki
 1. Download triples from [Ontology4ModelingEnvironment repository](https://github.com/BPaaSModelling/Ontology4ModelingEnvironment).
@@ -46,6 +43,9 @@ docker-compose up
 3. Click on "dataset" tab, then click on "upload files" tab
 4. Click on "Select files...", upload the downloaded triples
 
+### Open your browser:
+#### Access the WebApp at: http://localhost:4200/
+#### Access Jena Fuseki Triple Store at: http://localhost:3030/ 
 
 ## Stop the services
 - Open Docker Desktop, go to Containers tab (the top one), click on the stop button 🟦
