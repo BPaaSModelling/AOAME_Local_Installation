@@ -1,16 +1,16 @@
 @echo off
 
-rem This script can be used to setup AOAME locally.
-rem Prerequisites: git ( https://git-scm.com/downloads ), Node.js ( https://nodejs.org )
+REM This script can be used to set up AOAME locally.
+REM Prerequisites: git ( https://git-scm.com/downloads ), Node.js ( https://nodejs.org )
 
-rem ----------------------------------
+REM ----------------------------------
 
-rem Change these variable if you want to use a branch other than the master branch.
+REM Change these variables if you want to use a branch other than the master branch.
 set webapp_branch=master
 set webservice_branch=master
 set fuseki_branch=master
 
-rem --------------It is not recommended to change things below this line.---------------------
+REM --------------It is not recommended to change things below this line.---------------------
 
 echo AOAME local setup script started.
 
@@ -46,7 +46,6 @@ where ng
 if %ERRORLEVEL% neq 0 (
 	echo Installing angular...
 	npm install -g @angular/cli
-	
 	goto check_angular
 )
 
@@ -73,8 +72,10 @@ call :clone_repository
 
 :setup_webapp
 cd %base_dir%\%git_name%
-npm install
+npm install --legacy-peer-deps
 ng build
+
+call :setup_webapp
 
 pause
 goto end

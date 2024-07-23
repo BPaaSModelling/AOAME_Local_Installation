@@ -1,19 +1,42 @@
 #!/bin/bash
 
-echo "AOAME local setup script started."
+# Set the base directory
+base_dir="$(pwd)/aoame"
 
-# Get the directory of the script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Change directory and start fuseki server
+git_name=fuseki-heroku-test
+cd "$base_dir/$git_name"
+sh -x fuseki-server.sh &
 
-# Change to the script's directory
-cd "$SCRIPT_DIR"
+# Change directory and start web server for web service
+git_name=OntologyBasedModellingEnvironment-WebService
+cd "$base_dir/$git_name"
+sh -x start_webserver.sh &
 
-echo "Current Directory: $(pwd)"
+# Change directory and start server for web app
+git_name=OntologyBasedModellingEnvironment-WebApp
+cd "$base_dir/$git_name"
+node server.js
 
-echo "Running Docker Compose..."
+#!/bin/bash
 
-# Run Docker Compose
-docker-compose up
+# Set the base directory
+base_dir="$(pwd)/aoame"
 
-# Keep the terminal open
-read -p "Press any key to continue..."
+# Change directory and start fuseki server
+git_name=fuseki-heroku-test
+cd "$base_dir/$git_name"
+sh -x fuseki-server.sh &
+
+# Change directory and start web server for web service
+git_name=OntologyBasedModellingEnvironment-WebService
+cd "$base_dir/$git_name"
+sh -x start_webserver.sh &
+
+# Set trap to stop all child processes when this script receives SIGINT, SIGTERM, or EXIT signals
+trap 'pkill -P $$' SIGINT SIGTERM EXIT
+
+# Change directory and start server for web app
+git_name=OntologyBasedModellingEnvironment-WebApp
+cd "$base_dir/$git_name"
+node server.js &

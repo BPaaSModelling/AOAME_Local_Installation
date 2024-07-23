@@ -75,7 +75,7 @@ clone_repository
 
 # Setup webapp
 cd "$base_dir/$git_name"
-npm install
+npm install --legacy-peer-deps
 ng build
 
 echo "Setup complete. Press enter to exit."

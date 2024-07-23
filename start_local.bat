@@ -1,17 +1,14 @@
+set base_dir=%cd%\aoame
 
-@echo off
 
-REM Get the directory of the script
-set SCRIPT_DIR=%~dp0
+set git_name=fuseki-heroku-test
+cd %base_dir%\%git_name%
+start fuseki-server.bat
 
-REM Change to the script's directory
-cd /d %SCRIPT_DIR%
+set git_name=OntologyBasedModellingEnvironment-WebService
+cd %base_dir%\%git_name%
+start start_webserver.bat
 
-REM Display the current directory
-echo Current Directory: %cd%
-
-REM Run Docker Compose to start the services
-docker-compose up
-
-REM Keep the window open
-pause
+set git_name=OntologyBasedModellingEnvironment-WebApp
+cd %base_dir%\%git_name%
+start node server.js
