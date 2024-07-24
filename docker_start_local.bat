@@ -11,7 +11,7 @@ REM Display the current directory
 echo Current Directory: %cd%
 
 REM Run Docker Compose to start the services
-docker-compose up
+docker compose up --watch
 
 REM Keep the window open
 pause

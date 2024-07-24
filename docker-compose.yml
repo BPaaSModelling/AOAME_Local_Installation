@@ -1,32 +1,47 @@
 services:
-  WebApp:
+  webapp:
     container_name: aoame-webapp-container
-    #build: ./webapp
-    image: iisresearch/aoame-webapp-image:latest
+    build: ./aoame/OntologyBasedModellingEnvironment-WebApp
+    #image: iisresearch/aoame-webapp-image:latest
+    develop:
+        watch:
+          - action: rebuild
+            path: ./aoame/OntologyBasedModellingEnvironment-WebApp/
+            target: /app
+          - action: rebuild
+            path: ./aoame/OntologyBasedModellingEnvironment-WebApp/package.json
     depends_on:
-      - WebService
+      - webservice
     ports:
       - 4200:4200
     networks:
         - aoame-network
 
-  WebService:
+  webservice:
     container_name: aoame-webservice-container
-    #build: ./webservice
-    image: iisresearch/aoame-webservice-image:latest
+    build: ./aoame/OntologyBasedModellingEnvironment-WebService
+    #image: iisresearch/aoame-webservice-image:latest
+    develop:
+      watch:
+        - action: rebuild
+          path: ./aoame/OntologyBasedModellingEnvironment-WebService/
     environment:
-      - TRIPLESTORE_ENDPOINT=http://JenaFuseki:3030/ModEnv
+      - TRIPLESTORE_ENDPOINT=http://jena-fuseki:3030/ModEnv
     depends_on:
-      - JenaFuseki
+      - jena-fuseki
     ports:
       - 8080:8080
     networks:
       - aoame-network
 
-  JenaFuseki:
+  jena-fuseki:
     container_name: jena-fuseki-container
-    #build: ./jena-fuseki
-    image: iisresearch/jena-fuseki-image:latest
+    build: ./aoame/fuseki-heroku-test
+    #image: iisresearch/jena-fuseki-image:latest
+    develop:
+      watch:
+        - action: rebuild
+          path: ./aoame/fuseki-heroku-test/
     ports:
       - 3030:3030
     networks:
@@ -36,6 +51,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
 networks:
   aoame-network:
     driver: bridge

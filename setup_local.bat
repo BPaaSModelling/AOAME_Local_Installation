@@ -44,36 +44,34 @@ if %ERRORLEVEL% neq 0 (
 :check_angular
 where ng
 if %ERRORLEVEL% neq 0 (
-	echo Installing angular...
+	echo Installing Angular...
 	npm install -g @angular/cli
-	goto check_angular
+	if %ERRORLEVEL% neq 0 (
+		echo Failed to install Angular CLI
+		pause
+		goto end
+	)
 )
+goto check_repos
 
+:check_repos
 rem clone and deploy fuseki
 set git_name=fuseki-heroku-test
 set git_repository=https://github.com/BPaaSModelling/fuseki-heroku-test.git
 set branch=%fuseki_branch%
-
 call :clone_repository
 
 rem clone and deploy webservice
 set git_name=OntologyBasedModellingEnvironment-WebService
 set git_repository=https://github.com/BPaaSModelling/OntologyBasedModellingEnvironment-WebService.git
 set branch=%webservice_branch%
-
 call :clone_repository
 
 rem clone and deploy webapp
 set git_name=OntologyBasedModellingEnvironment-WebApp
 set git_repository=https://github.com/BPaaSModelling/OntologyBasedModellingEnvironment-WebApp.git
 set branch=%webapp_branch%
-
 call :clone_repository
-
-:setup_webapp
-cd %base_dir%\%git_name%
-npm install --legacy-peer-deps
-ng build
 
 call :setup_webapp
 
@@ -82,21 +80,33 @@ goto end
 
 rem Clone a repository if it does not exist already.
 :clone_repository
-
 cd %base_dir%
-
 if not exist %git_name% (
-	
 	echo Cloning %git_name% repository from %git_repository%
-	
-	call git clone %git_repository%
-	
-	if not exist %git_name% (
+	git clone %git_repository% -b %branch%
+	if %ERRORLEVEL% neq 0 (
 		echo Failed to clone repository %git_name% from %git_repository%
 		pause
-		exit
+		goto end
 	)
 )
-goto end
+exit /b 0
+
+:setup_webapp
+cd %base_dir%\OntologyBasedModellingEnvironment-WebApp
+npm install --legacy-peer-deps
+if %ERRORLEVEL% neq 0 (
+	echo Failed to install npm packages for the webapp
+	pause
+	goto end
+)
+ng build
+if %ERRORLEVEL% neq 0 (
+	echo Failed to build the webapp
+	pause
+	goto end
+)
+exit /b 0
 
 :end
+echo AOAME local setup script completed.

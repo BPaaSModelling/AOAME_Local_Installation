@@ -13,7 +13,7 @@ echo "Current Directory: $(pwd)"
 echo "Running Docker Compose..."
 
 # Run Docker Compose
-docker-compose up
+docker compose up --watch
 
 # Keep the terminal open
 read -p "Press any key to continue..."

@@ -2,7 +2,7 @@
 
 ## Summary
 ### Docker
-- [Installation with Docker](#installation)
+- [Installation with Docker](#installation-with-docker)
 - [Start AOAME](#start-aoame)
 - [Upload Ontologies to Jena Fuseki](#upload-ontologies-to-jena-fuseki)
 - [Stop the Services](#stop-the-services)
@@ -11,7 +11,7 @@
 - [Local Installation](#local-installation)
 - [Setup Development Environment](#setup-development-environment)
 - [Building the WebService](#building-the-webservice)
-- [Running/Debugging the WebService](#running-debugging-the-webservice)
+- [Running/Debugging the WebService](#runningdebugging-the-webservice)
 - [Building the WebApp](#building-the-webapp)
 - [Starting AOAME](#starting-aoame)
 - [Pushing the artifact to GitHub and AOAME](#pushing-the-artifact-to-github-and-aoame)
@@ -24,17 +24,24 @@
 2. Install Docker Desktop as administrator: click **Default Setup**, and skip the creation of an account
 3. Run Docker Desktop as administrator
 
+## Setup AOAME
+- Prerequisites:
+  - Docker Desktop
+  - Git: <https://git-scm.com/downloads>
+- Run the `setup_local.bat` (Windows) or `setup_local.sh` (MacOs/Linux) file
+  - This script will git pull all required repositories: WebApp, WebService, JenaFuseki into **aoame/** directory
+
 ## Start AOAME
 - Make sure Docker Desktop is running
-- For Windows: Run the `start_local_docker.bat` file (try to run as administrator if needed).
-- For MacOS/Linux: Run the `start_local_docker.sh` file.
+- For Windows: Run the `docker_start_local.bat` file (run as administrator if access denied).
+- For MacOS/Linux: Run the `docker_start_local.sh` file (try to run as administrator if access denied).
   - Open a terminal/console in the **Project Directory**
-    - use `cd path-to-the-project` to navigate to the project directory if needed.
+    - drag the file into the terminal or use `cd path-to-the-project` to navigate to the project directory if needed.
   - Make the script executable with `chmod +x start_local_docker.sh` and run it `./start_local_docker.sh`. [Mac Support](https://support.apple.com/en-vn/guide/terminal/apdd100908f-06b3-4e63-8a87-32e71241bab4/mac) 
 - **Alternatively for any OS**
   - Open a terminal in the **Project Directory** and run the following command:
 ```bash 
-docker-compose up
+docker compose up --build
 ```
 
 ## Upload Ontologies to Jena Fuseki
@@ -52,7 +59,7 @@ docker-compose up
 - Alternatively, open the running terminal and press Ctrl+C 2 times to stop the services
 - Alternatively, run the following command in the terminal:
 ```bash
-docker-compose down
+docker compose down
 ```
 ## Remove the services
 - Open Docker Desktop, go to Containers tab (the top one), click on the remove button
