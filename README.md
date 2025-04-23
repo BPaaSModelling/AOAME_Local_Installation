@@ -15,7 +15,7 @@
 - [Building the WebApp](#building-the-webapp)
 - [Starting AOAME](#starting-aoame)
 - [Pushing the artifact to GitHub and AOAME](#pushing-the-artifact-to-github-and-aoame)
-
+- [Troubleshooting & Known Issues](#troubleshooting--known-issues)
 
 
 # Docker
@@ -237,3 +237,83 @@ Create a Pull request directly from GitHub that will be merged when approved (se
 ![868da44782ed4f759a2e5894f22d6d61](https://github.com/BPaaSModelling/AOAME/assets/18686110/b220ca26-7824-4dbe-8fb5-d98bd995a3c7)
 
 ![457cdc90f5c3e9580e15afd8f21c46d2](https://github.com/BPaaSModelling/AOAME/assets/18686110/d4382e2b-7559-4887-867a-83bb1af63d4e)
+
+## Troubleshooting & Known Issues
+
+### Angular CLI requires newer Node.js
+If you see:
+```
+The Angular CLI requires a minimum Node.js version of v18.19.
+```
+But you're using Angular 10 (as in this project), then the CLI version is too new.
+
+**Fix:**
+- Uninstall current CLI:
+```bash
+npm uninstall -g @angular/cli
+```
+- Install version compatible with Angular 10:
+```bash
+npm install --save-dev @angular/cli@10.2.3
+```
+- Then build using:
+```bash
+npx ng build
+```
+
+### npm ERESOLVE error during install
+**Fix:**
+Use this flag to allow older dependencies:
+```bash
+npm install --legacy-peer-deps
+```
+
+### ERR_OSSL_EVP_UNSUPPORTED when using Node 17+
+This OpenSSL error means Node.js is too new for Angular 10/Webpack 4.
+
+**Fix options:**
+1. Downgrade to Node v16.4.2  
+2. Or set this environment variable temporarily:
+```bash
+set NODE_OPTIONS=--openssl-legacy-provider
+npx ng build
+```
+
+### Java WebService error: javax.ws.rs.Path not present
+Tomcat throws:
+```
+Caused by: java.lang.ClassNotFoundException: javax.ws.rs.Path
+```
+**Fix:** Add the following to the WebService `pom.xml` under `<dependencies>`:
+```xml
+<dependency>
+  <groupId>javax.ws.rs</groupId>
+  <artifactId>javax.ws.rs-api</artifactId>
+  <version>2.1.1</version>
+  <scope>provided</scope>
+</dependency>
+```
+Then run:
+```bash
+mvn clean package
+```
+
+### Folder "aoame" already exists
+If you rerun the script and get:
+```
+A subdirectory or file aoame already exists.
+```
+You can delete the folder manually, or update the script to:
+```bat
+if not exist aoame mkdir aoame
+```
+
+### Checking your environment
+Use these commands to confirm you have compatible versions installed:
+```bash
+node -v           # should be v16.4.2
+npm -v            # around 7.x
+npx ng version    # check Angular version used
+java -version     # should be Temurin 17.0.7+7
+mvn -v            # to confirm Maven is installed
+```
